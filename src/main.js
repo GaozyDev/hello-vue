@@ -5,7 +5,7 @@ import App from './App.vue'
 import './assets/main.css'
 
 const routes = [
-    { path: '/', component: () => import('./components/HelloWorld.vue') },
+    { path: '/', component: () => import('./page/home/home.vue') },
     { path: '/page1', component: () => import('./page/page1/page1.vue') },
     { path: '/page2', component: () => import('./page/page2/page2.vue') },
 ]
