@@ -1,11 +1,13 @@
 import {createApp} from 'vue'
 import {createRouter, createWebHashHistory} from "vue-router";
 import App from './App.vue'
-
 import './assets/main.css'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 
 const routes = [
     { path: '/', component: () => import('./page/home/home.vue') },
+    { path: '/login', component: () => import('./page/login/login.vue') },
     { path: '/page1', component: () => import('./page/page1/page1.vue') },
     { path: '/page2', component: () => import('./page/page2/page2.vue') },
 ]
@@ -19,5 +21,8 @@ const router = createRouter({
     routes, // `routes: routes` 的缩写
 })
 
-createApp(App).use(router).mount('#app')
+const app = createApp(App);
+app.use(router)
+app.mount('#app')
+app.use(ElementPlus)
 
