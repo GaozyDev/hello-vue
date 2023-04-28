@@ -4,11 +4,11 @@
     <div class="user_wrap">
       <div v-if="isLogin">
         <div class="user" @click="showUserDialog()">
-          <div class="username">Gzy</div>
+          <div class="username">{{userInfo.username}}</div>
           <arrowIconIcon class="user_icon"/>
         </div>
         <div class="user_dialog" v-if="isShowUserDialog">
-          <div class="btn">退出登录</div>
+          <div class="btn" @click="logout">退出登录</div>
         </div>
       </div>
       <div v-else class="login" @click="goLoginPage()">
@@ -20,6 +20,7 @@
 
 <script>
 import arrowIconIcon from '../../../image/svg/IconArrowWhite.vue'
+import {ElMessage} from "element-plus";
 
 export default {
   components: {
@@ -27,8 +28,18 @@ export default {
   },
   data() {
     return {
-      isLogin: false,
+      isLogin: localStorage.getItem('Authorization') != null,
+      userInfo: {},
       isShowUserDialog: false
+    }
+  },
+  mounted() {
+    if (localStorage.getItem('Authorization') != null) {
+      this.axios.get('/user/info')
+          .then(response => {
+            console.log(response.data)
+            this.userInfo = response.data["data"]
+          })
     }
   },
   methods: {
@@ -37,6 +48,18 @@ export default {
     },
     goLoginPage() {
       this.$router.push('/login')
+    },
+    logout() {
+      this.axios.post('/user/logout')
+          .then(() => {
+            ElMessage({
+              message: '退出成功',
+              type: 'success',
+            })
+            localStorage.removeItem('Authorization')
+            this.userInfo = {}
+            this.isLogin = false;
+          })
     },
   }
 }

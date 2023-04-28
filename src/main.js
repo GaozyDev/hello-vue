@@ -14,18 +14,39 @@ const routes = [
     { path: '/page2', component: () => import('./page/page2/page2.vue') },
 ]
 
-// 3. 创建路由实例并传递 `routes` 配置
-// 你可以在这里输入更多的配置，但我们在这里
-// 暂时保持简单
 const router = createRouter({
-    // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
     history: createWebHashHistory(),
-    routes, // `routes: routes` 的缩写
+    routes,
 })
+
+const api = axios.create({
+    baseURL: 'http://127.0.0.1:8080/',
+});
+
+// 添加请求拦截器
+api.interceptors.request.use(function (config) {
+    // 在发送请求之前做些什么
+    let token = window.localStorage.getItem('Authorization');
+    // 添加token
+    token && (config.headers.Authorization = token)
+    return config;
+}, function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+});
+
+// 添加响应拦截器
+api.interceptors.response.use(function (response) {
+    // 对响应数据做点什么
+    return response;
+}, function (error) {
+    // 对响应错误做点什么
+    return Promise.reject(error);
+});
+
 
 const app = createApp(App);
 app.use(router)
 app.mount('#app')
 app.use(ElementPlus)
-axios.defaults.withCredentials = true // 让ajax携带cookie
-app.use(VueAxios, axios)
+app.use(VueAxios, api)

@@ -31,8 +31,7 @@ export default {
         })
         return;
       }
-      this.axios
-          .post('http://127.0.0.1:8080/user/login', {
+      this.axios.post('/user/login', {
             "username": this.username,
             "password": this.password
           })
@@ -41,8 +40,9 @@ export default {
               message: '登录成功',
               type: 'success',
             })
-            console.log(response.headers)
-            // document.cookie = response.data['data']['token'];
+
+            localStorage.setItem('Authorization', response.data["data"]["token"]);
+            this.$router.replace('/')
           })
     },
   }
