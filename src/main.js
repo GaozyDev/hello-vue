@@ -4,6 +4,8 @@ import App from './App.vue'
 import './assets/main.css'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 const routes = [
     { path: '/', component: () => import('./page/home/home.vue') },
@@ -25,4 +27,5 @@ const app = createApp(App);
 app.use(router)
 app.mount('#app')
 app.use(ElementPlus)
-
+axios.defaults.withCredentials = true // 让ajax携带cookie
+app.use(VueAxios, axios)
